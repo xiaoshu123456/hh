@@ -38,17 +38,19 @@ public class DownloadDemo {
 			map.put("version", Constants.MY_API_VERSION);
 			map.put("timestamp", timeStamp);
 			map.put("signature", signature);
+			//把map转换成json文本 
 			String orderInfoJson = JsonUtils.toJsonString(map);
 			System.out.println("download接口中输入的第一个参数：" + orderInfoJson);
-
+			
 			Map<String, String> parasMap = new HashMap<String, String>();
 			// 接口的第一个参数:orderInfoJson
 			parasMap.put("orderInfoJson", orderInfoJson);
 			// 调用接口的二个参数：账号必须是该订单对应合同的收件人之一，否则没有权限下载合同
 			parasMap.put("account", Constants.ENTERPRISE_ACCOUNT);
 			HttpResponse myResponse = ApiHttpUtils.sendPost_returnResponse(API_DOWN_SIGN_URI, parasMap);
+													//返回的状态吗
 			System.out.println("response code = " + myResponse.getStatusLine().getStatusCode());
-
+			//从响应中获取消息实体
 			HttpEntity resposeEntity = myResponse.getEntity();
 
 			// 备注：请根据业务需求给每个下载的文档赋予不同的文件名，并存储至适当的位置。

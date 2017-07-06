@@ -22,9 +22,10 @@ import utils.ApiUtils;
 public class ExporttemplatesDemo {
 
 	public static void main(String[] args) {
-		// exporttemplates接口的url
+		// exporttemplates接口的url 地址
 		String API_EXPORT_TEMPLATES_URI = Constants.API_SERVER_URI + "/exporttemplates.shtml";
 		try {
+			//创建时间戳
 			String timeStamp = String.valueOf(System.currentTimeMillis());
 
 			/**
@@ -34,7 +35,8 @@ public class ExporttemplatesDemo {
 			List<String> lists = new ArrayList<String>();
 			lists.add("appId=" + Constants.MY_APP_ID);
 			lists.add("timestamp=" + timeStamp);
-			lists.add("version=" + Constants.MY_API_VERSION);
+			lists.add("version=" + Constants.MY_API_VERSION);//版本
+															//一号签系统给对接平台分配的企业APP的秘钥
 			String signature = ApiUtils.getSignature(lists, Constants.MY_APP_SECRET);
 			System.out.println("signature = " + signature);
 

@@ -28,6 +28,7 @@ public class ApiUtils {
 	}
 
 	public static String getSignature(List<String> lists, String appSecret) {
+		//排序
 		Collections.sort(lists);
 		String p = "";
 		for (String s : lists) {
@@ -40,9 +41,10 @@ public class ApiUtils {
 		/*自己实现产生签名方法时请注意，appsecret全为小写。*/
 		p = p + "&appsecret=" + appSecret;
 		System.out.println(" p = " + p);
+		//加密
 		String signature = DigestUtils.sha1Hex(p).toUpperCase();
 		System.out.println(" signature = " + signature);
-		
+		//返回加密 签名
 		return signature;
 	}
 

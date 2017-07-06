@@ -40,12 +40,13 @@ public class StartsignDemo {
 			 * 使用appSecret为参数列表生成签权签名
 			 * 注：生成签名里的timestamp一定要和API接口中传入的timestamp参数的值是相同的。
 			 */
+			//得到加密的签名
 			String signature = ApiHttpUtils.getMySignature(Constants.MY_APP_ID, Constants.MY_TEMPLATE_ID,
 					Constants.MY_ORDER_ID, timeStamp, Constants.MY_API_VERSION, Constants.MY_APP_SECRET);
 			Map<String, Object> map = new HashMap<String, Object>();
 			// 设置appId
 			map.put("appId", Constants.MY_APP_ID);
-			// 设置要使用的模板，该模板
+			// 设置要使用的模板，该模板id
 			map.put("templateId", Constants.MY_TEMPLATE_ID);
 			// 设置本次要签约的业务编号
 			map.put("orderId", Constants.MY_ORDER_ID);
@@ -55,9 +56,11 @@ public class StartsignDemo {
 			map.put("timestamp", timeStamp);
 			// 设置签权签名
 			map.put("signature", signature);
-			// 设置合同的标题，标题尽量设置得有意义，以便标识并方便检索
+			// 设置合同的标题，标题尽量设置得有意义，以便标识并方便检索    
+			//template+模板id+时间戳
 			map.put("title", "template-" + Constants.MY_TEMPLATE_ID + "-" + System.currentTimeMillis());
-			map.put("signature", signature);
+			
+			//map.put("signature", signature);
 
 			// ******设置第1个签署人的信息
 			List<JSONObject> signatories = new ArrayList<JSONObject>();
@@ -80,14 +83,18 @@ public class StartsignDemo {
 			// 将这两个签署人的信息加入signatories链表中
 			signatories.add(party0);
 //			signatories.add(party1);
+			//把签署人的信息的集合放到map中
 			map.put("signatories", signatories);
 
 			/** 调用发起签署接口创建合同 */
 			Map<String, String> parasMap = new HashMap<String, String>();
+			//把map集合转换成json字符串格式
 			String signCommonJson = JsonUtils.toJsonString(map);
+			//放到parasMap集合中
 			parasMap.put("signCommonJson", signCommonJson);
+			//"appId":"1S14981167881478a0c90861c","orderId":"test1格式
 			System.out.println("startsign接口输入：" + signCommonJson);
-			
+			//得到所有parasMap信息
 			String returnJson = ApiHttpUtils.sendPost(api_startsign_url, parasMap);
 			System.out.println("startsign接口返回：returnJson=" + returnJson);
 			System.out.println("-----------------------------------------");

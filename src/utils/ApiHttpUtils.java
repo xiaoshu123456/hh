@@ -192,10 +192,12 @@ public class ApiHttpUtils {
 		FileOutputStream fileout = null;
 		try {
 			inStream = entity.getContent();
+														//返回的实际可读字节数，也就是总大小
 			System.out.println("file stream size:{}" + inStream.available());
 			File file = new File(filePath);
+			//获得父目录,创建文件夹
 			file.getParentFile().mkdirs();
-
+			//创建一个文件流
 			fileout = new FileOutputStream(file);
 			/**
 			 * 根据实际运行效果 设置缓冲区大小
@@ -227,6 +229,7 @@ public class ApiHttpUtils {
 	 *            参数的map：key为参数名称，value为对象的JSON字符串
 	 * @return
 	 */
+								//连接地址     appId，templateId，orderId，version，timestamp，signature，title，signatories
 	public static String sendPost(String url, Map<String, String> parasMap) {
 		if (url == null) {
 			System.out.println("输入参数为空");
@@ -239,22 +242,29 @@ public class ApiHttpUtils {
 		}
 
 		try {
+			 // 创建默认的httpClient实例.    
 			CloseableHttpClient httpClient = HttpClients.createDefault();
+			// 创建httppost    
 			HttpPost httppost = new HttpPost(url);
 
 			// 设置post请求的实体部分
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-
+								//得到每一个key
 			for (String key : parasMap.keySet()) {
+				//得到每一个value值 并进行转码
 				StringBody stringBody = new StringBody(parasMap.get(key), Charset.forName("UTF-8"));
 				HttpEntity reqEntity = builder.addPart(key, stringBody).build();
 				httppost.setEntity(reqEntity);
 			}
+			   // 执行post请求. 
 			HttpResponse myResponse = httpClient.execute(httppost);
+			//判断得到的状态码是否不等于200
 			if (myResponse.getStatusLine().getStatusCode() != 200) {
 				System.out.println("code:{}" + myResponse.getStatusLine().getStatusCode());
 			}
+			   // 获取响应实体    
 			HttpEntity entity = myResponse.getEntity();
+			//转换成字符串 进行编码格式的约束
 			String returnJson = EntityUtils.toString(entity, CharEncoding.UTF_8);
 
 			// System.out.println("调用url=" + url + ", response: --> {}" +
@@ -291,18 +301,22 @@ public class ApiHttpUtils {
 			return null;
 		}
 		try {
+			 // 创建默认的httpClient实例. 
 			CloseableHttpClient httpClient = HttpClients.createDefault();
+			 // 创建httppost  请求
 			HttpPost httppost = new HttpPost(url);
 
 			// 设置post请求的实体部分
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			for (String key : parasMap.keySet()) {
 				StringBody stringBody = new StringBody(parasMap.get(key), Charset.forName("UTF-8"));
+				// 生成 HTTP POST 实体  	
 				HttpEntity reqEntity = builder.addPart(key, stringBody).build();
+				//设置请求参数
 				httppost.setEntity(reqEntity);
 			}
 			// System.out.println("calling url=" + url);
-
+			// 发起请求 并返回请求的响应
 			HttpResponse myResponse = httpClient.execute(httppost);
 			return myResponse;
 		} catch (UnsupportedEncodingException e) {
@@ -408,12 +422,16 @@ public class ApiHttpUtils {
 	 * @param timestamp
 	 * @param version
 	 * @return
-	 */
+	 */										
+										//给企业对接的id      模板ID      平台生成的业务号			时间戳
 	public static String getMySignature(String appId, String templateId, String orderId, String timestamp,
+			//版本				企业APP的秘钥
 			String version, String appSecret) {
 
 		List<String> lists = new ArrayList<String>();
+		//判断是否为空或者为null
 		if (!StringUtils.isBlank(appId)) {
+			//不为空就添加
 			lists.add("appId=" + appId);
 		}
 		if (!StringUtils.isBlank(orderId)) {
@@ -428,8 +446,10 @@ public class ApiHttpUtils {
 		if (!StringUtils.isBlank(version)) {
 			lists.add("version=" + version);
 		}
-		
+		//平台信息结合,       一号签系统给对接平台分配的企业APP的秘钥       
+		//得到加密的签名
 		String signature = ApiUtils.getSignature(lists, appSecret);
+		//返回签名
 		return signature;
 	}
 

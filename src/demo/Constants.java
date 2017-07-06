@@ -20,7 +20,8 @@ public class Constants {
 	// 本demo使用的API的版本。03之后版本的startsign和silentsign的返回值中包括签署状态，不必再调用signstatus来查询签署状态。
 	public static final String MY_API_VERSION = "03";
 
-	// 双方均签约成功后，请修改订单编号,否则会报重复签署的错误
+	// 双方均签约成功后，请修改订单编号,否则会报重复签署的错误     由平台生成的业务号，同一平台号下，所有业务号的编号必须唯一。
+	//1号签将有唯一的合同与之对应。
 	public static final String MY_ORDER_ID = "test1";
 
 }

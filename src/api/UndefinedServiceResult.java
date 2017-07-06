@@ -21,7 +21,7 @@ public class UndefinedServiceResult {
 	 * 要返回的对象
 	 */
 	Object obj;
-
+	//UndefinedServiceResult.FAIL, "接口返回JSON格式不正确", false
 	public UndefinedServiceResult(String resultCode, String resultMsg, Object obj) {
 		this.resultCode = resultCode;
 		this.resultMsg = resultMsg;
